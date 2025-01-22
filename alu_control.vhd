@@ -4,10 +4,10 @@ use IEEE.numeric_std.all;
 
 entity AluControl is 
     port(
-        funct: in std_logic_vector(5 down to 0);
-        alu_op: in std_logic_vector(1 down to 0);
+        funct: in std_logic_vector(5 downto 0);
+        alu_op: in std_logic_vector(1 downto 0);
         a_inverte, b_inverte: out std_logic;
-        operacao: out std_logic_vector(1 down to 0)
+        operacao: out std_logic_vector(1 downto 0)
     );
 end AluControl;
 
