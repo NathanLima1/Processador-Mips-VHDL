@@ -4,16 +4,16 @@ use IEEE.numeric_std.all;
 
 entity Or32 is
     port(
-        entrada: in std_logic_vector(31 down to 0);
+        entrada: in std_logic_vector(31 downto 0);
         saida: out std_logic
     );
 end Or32;
 
 architecture Behavioral of Or32 is
-    signal n1: std_logic_vector(15 down to 0);
-    signal n2: std_logic_vector(7 down to 0);
-    signal n3: std_logic_vector(3 down to 0);
-    signal n4: std_logic_vector(1 down to 0);
+    signal n1: std_logic_vector(15 downto 0);
+    signal n2: std_logic_vector(7 downto 0);
+    signal n3: std_logic_vector(3 downto 0);
+    signal n4: std_logic_vector(1 downto 0);
 begin
     gen_n1: for i in 0 to 15 generate
         n1(i) <= entrada(2*i) or entrada(2*i+1);
