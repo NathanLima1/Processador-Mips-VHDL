@@ -4,8 +4,8 @@ use IEEE.numeric_std.all;
 
 entity Control is 
     port(
-        opcode: in std_logic_vector(5 down to 0);
-        alu_op: out std_logic_vector(1 down to 0);
+        opcode: in std_logic_vector(5 downto 0);
+        alu_op: out std_logic_vector(1 downto 0);
         reg_write, reg_dst, alu_src, branch, mem_write, mem_to_reg, jump, mem_read out std_logic
     );
 end Control;
