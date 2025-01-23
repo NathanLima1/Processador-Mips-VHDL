@@ -4,7 +4,7 @@
 -- 
 -- Create Date:    11:17:41 04/26/2023 
 -- Design Name: 
--- Module Name:    mux2 - Behavioral 
+-- Module Name:    mux_4 
 ----------------------------------------------------------------------------------
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
