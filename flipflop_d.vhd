@@ -25,7 +25,7 @@ use IEEE.STD_LOGIC_1164.ALL;
 --library UNISIM;
 --use UNISIM.VComponents.all;
 
-entity FlipFlopD is
+entity FlipFlop_D is
 	port(
 		D: in std_logic;
 		Q : out std_logic;
@@ -33,9 +33,9 @@ entity FlipFlopD is
 		clk : in std_logic
 	);
 
-end FlipFlopD;
+end FlipFlop_D;
 
-architecture Behavioral of FlipFlopD is
+architecture Behavioral of FlipFlop_D is
 begin
 	process (clk)
 	begin
