@@ -39,13 +39,10 @@ architecture Behavioral of FlipFlop_D_C is
 begin
 	process (clk)
 	begin
-		if rising_edge(clk) then
-			if Clear='1' then
-				Q <= '0';
-            else
-                Q<= D;
-
-			end if;
+		if Clear='1' then
+			Q <= '0';
+		elsif rising_edge(clk) then
+			Q <= D;
 		end if;
 	end process;
 
