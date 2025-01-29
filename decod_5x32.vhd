@@ -28,7 +28,7 @@ use IEEE.NUMERIC_STD.ALL;
 entity Decod_5x32 is
     port(
         Entrada: in std_logic_vector(4 downto 0);
-        Saida: out in std_logic_vector(31 downto 0)
+        Saida: out std_logic_vector(31 downto 0)
     );
 end Decod_5x32;
 
