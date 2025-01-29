@@ -22,7 +22,6 @@ architecture Behavioral of Ula_32 is
 	signal VaiSet : std_logic;
 	signal ResultadoLocal : std_logic_vector (31 downto 0);
 begin
-	VaiSet <= '0';
 	-- Generate das ULAs de 1 bit
    	Ula0_1 : entity work.ula_1
 			port map (
@@ -35,12 +34,12 @@ begin
             Resultado => ResultadoLocal(0),
             VaiUm => VaiUm(0),
 				
-	-- Corrigir
-	Less => VaiSet
+				-- Corrigir
+				Less => VaiSet
          );
 
 		
-		gen_ula : for i in 1 to 31 generate
+		gen_ula : for i in 1 to 30 generate
     	begin
             Ula0_resto : entity work.ula_1
                 port map (
@@ -52,10 +51,23 @@ begin
                    Operacao => Operacao,
                    Resultado => ResultadoLocal(i),
                    VaiUm => VaiUm(i),
-						 Less => '0',
-						 Set => VaiSet
+						 Less => '0'
                 );
 		end generate;
+		
+		Ula31_1 : entity work.ula_1
+			port map (
+				A => A(31),
+				B => B(31),
+				Ainvert => Anegate,
+				Binvert => Bnegate,
+				VemUm => VaiUm(30),
+				Operacao => Operacao,
+				Resultado => ResultadoLocal(31),
+				VaiUm => VaiUm(31),
+				Less => '0',
+				Set => VaiSet
+			);
 	
 		Or_32Instancia : entity work.or_32
 			port map (
@@ -66,3 +78,5 @@ begin
 			Resultado <= ResultadoLocal;
 		 Zero <= not OrResult;
 end Behavioral;
+
+
