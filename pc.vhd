@@ -61,7 +61,7 @@ begin
     FF_D_Preset: for i in 0 to 31 generate
         FF: entity work.FlipFlop_D_P
             port map(
-                D => Entrada(i);
+                D => Entrada(i),
                 Clk => Clk;
                 Preset => Reset,
                 Q => Q(i)
