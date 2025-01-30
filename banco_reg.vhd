@@ -1,6 +1,6 @@
 ----------------------------------------------------------------------------------
 -- Company: 
--- Engineer: 
+-- Engineer: Leonardo Guimarães de Oliveira
 -- 
 -- Create Date:    15:43:41 01/29/2025 
 -- Design Name: 
@@ -39,8 +39,7 @@ entity banco_reg is
 		
 		read_reg1, read_reg2: out std_logic_vector(31 downto 0);
 		
-		clock: in std_logic;
-		Enable: in std_logic
+		clock: in std_logic
 		);
 		
 end banco_reg;
@@ -71,7 +70,7 @@ component mux_32_x_32 is
 end component;
 
 signal decod_sel: std_logic_vector(0 to 31);
-signal enable_flipflop: std_logic;
+signal enable_flipflop: std_logic_vector(0 to 31);
 
 signal saidaread: tipo.vetor_de_palavras(0 to 31);
 
@@ -82,11 +81,11 @@ begin
 		Saida => decod_sel
 	);
 	gen_regs: for i in 0 to 31 generate
-		enable_flipflop <= Enable and decod_sel(i);
+		enable_flipflop(i) <= reg_write and decod_sel(i);
 		reg: flipflop_d_enable_32 port map (
 			D => write_data,
 			clk => clock,
-			Enable => enable_flipflop,
+			Enable => enable_flipflop(i),
 			Q => saidaread(i)
 		);
 	end generate gen_regs;
