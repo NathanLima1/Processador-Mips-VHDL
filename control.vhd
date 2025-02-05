@@ -76,6 +76,11 @@ begin
 
             when "000010" => --j
                 jump <= '1';
+            
+            when others =>
+                alu_op <= "10";
+                reg_dst <= '1';
+                reg_write <= '1';
         end case;
     end process;
 end Behavioral;
