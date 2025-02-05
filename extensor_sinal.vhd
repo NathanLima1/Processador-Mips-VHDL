@@ -42,7 +42,6 @@ architecture GenerateBased of extensor_sinal is
     output_32(15 downto 0) <= input_16;
 
     gen: for i in 16 to 31 generate
-        output_32 <= input_16(15);
+        output_32(i) <= input_16(15);
     end generate;
 end GenerateBased;
-
