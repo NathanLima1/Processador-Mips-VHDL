@@ -78,9 +78,9 @@ begin
                 jump <= '1';
             
             when others =>
-                alu_op <= "10";
-                reg_dst <= '1';
-                reg_write <= '1';
+                alu_op <= "00";
+                reg_dst <= '0';
+                reg_write <= '0';
         end case;
     end process;
 end Behavioral;
