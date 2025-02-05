@@ -62,7 +62,7 @@ begin
         FF: entity work.FlipFlop_D_P
             port map(
                 D => Entrada(i),
-                Clk => Clk;
+                Clk => Clk,
                 Preset => Reset,
                 Q => Q(i)
             );
