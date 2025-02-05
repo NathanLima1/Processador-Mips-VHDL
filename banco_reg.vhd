@@ -55,6 +55,16 @@ architecture Behavioral of banco_reg is
 		);
 	 end component;
 
+	component flipflop_d_clear_enable_32 is
+		port(
+			D: in std_logic_vector(31 downto 0);
+			Q: out std_logic_vector(31 downto 0);
+			Enable: in std_logic;
+			Clear: in std_logic;
+			clk: in std_logic
+		);
+	 end component;
+
 	component Decod_5x32 is
 		port(
 			Entrada: in std_logic_vector(4 downto 0);
@@ -62,17 +72,18 @@ architecture Behavioral of banco_reg is
 		);
 	end component;
 
-component mux_32_x_32 is
-	port (
-		entrada : in tipo.vetor_de_palavras(0 to 31);
- 	   selecao : in std_logic_vector(4 downto 0);
-		saida : out std_logic_vector(31 downto 0) );
-end component;
 
-signal decod_sel: std_logic_vector(0 to 31);
-signal enable_flipflop: std_logic_vector(0 to 31);
+	component mux_32_x_32 is
+		port (
+			entrada : in tipo.vetor_de_palavras(0 to 31);
+			selecao : in std_logic_vector(4 downto 0);
+			saida : out std_logic_vector(31 downto 0) );
+	end component;
 
-signal saidaread: tipo.vetor_de_palavras(0 to 31);
+	signal decod_sel: std_logic_vector(0 to 31);
+	signal enable_flipflop: std_logic_vector(0 to 31);
+
+	signal saidaread: tipo.vetor_de_palavras(0 to 31);
 
 begin
 
@@ -80,7 +91,18 @@ begin
 		Entrada => addr_write,
 		Saida => decod_sel
 	);
-	gen_regs: for i in 0 to 31 generate
+
+	enable_flipflop(0) <= reg_write and decod_sel(0);
+	
+	reg: flipflop_d_clear_enable_32 port map (
+			D => write_data,
+			clk => clock,
+			Enable => enable_flipflop(0),
+			Q => saidaread(0),
+			Clear => '1'
+	);
+
+	gen_regs: for i in 1 to 31 generate
 		enable_flipflop(i) <= reg_write and decod_sel(i);
 		reg: flipflop_d_enable_32 port map (
 			D => write_data,
