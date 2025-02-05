@@ -17,7 +17,7 @@ end flipflop_d_clear_enable_32;
 architecture Behavioral of flipflop_d_clear_enable_32 is
     component flipflop_d_clear_enable is
         port(
-            D, Enable, clk: in std_logic;
+            D, Enable, Clear, clk: in std_logic;
             Q: out std_logic
         );
     end component;
