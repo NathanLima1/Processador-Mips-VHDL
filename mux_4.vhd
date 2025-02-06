@@ -12,7 +12,7 @@ use IEEE.numeric_std.all;
 
 entity mux_4 is
     port(
-        E: in std_logic(0 to 3);
+        E: in std_logic_vector(3 downto 0);
         Sel: in std_logic_vector(1 downto 0);
         Saida: out std_logic
     );
