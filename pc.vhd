@@ -1,79 +1,52 @@
-----------------------------------------------------------------------------------
--- Company: UFSJ
--- Engineer: Nathan Lima
--- 
--- Create Date:    15:17:50 01/22/2025 
--- Design Name: 
--- Module Name:    PC - Behavioral 
--- Project Name: 
--- Target Devices: 
--- Tool versions: 
--- Description: Program counter
---
--- Dependencies: 
---
--- Revision: 
--- Revision 0.01 - File Created
--- Additional Comments: 
---
-----------------------------------------------------------------------------------
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
+use IEEE.STD_LOGIC_ARITH.ALL;
+use IEEE.STD_LOGIC_UNSIGNED.ALL;
 
-use IEEE.NUMERIC_STD.ALL;
-
---library UNISIM;
---use UNISIM.VComponents.all;
-
-entity PC is
-    port(
-        Clk: in std_logic;
-        Reset: in std_logic;
-        Enable: in std_logic;
-        Entrada: in std_logic_vector(31 downto 0);
-        Saida: out std_logic_vector(31 downto 0)
+entity PC_Register is
+    Port (
+        clk   : in STD_LOGIC;
+        clear : in STD_LOGIC;
+        enable: in STD_LOGIC;
+        preset: in STD_LOGIC;
+        reset : in STD_LOGIC;
+        d_in  : in STD_LOGIC_VECTOR(31 downto 0);
+        q_out : out STD_LOGIC_VECTOR(31 downto 0)
     );
-end PC;
+end PC_Register;
 
-architecture Behavioral of PC is
-    signal Q: std_logic_vector(31 downto 0);
-
-    constant RESET_ADDR: std_logic_vector(31 downto 0) := X"00003000";
-
+architecture Behavioral of PC_Register is
+    signal reg_value : STD_LOGIC_VECTOR(31 downto 0) := X"00003000";
 begin
-    process(Reset)
-    begin
-        if Reset = '1' then
-            Q <= RESET_ADDR;
-        end if;
-    end process;
 
-    FF_D_Clear: for i in 0 to 31 generate
-        FF: entity work.FlipFlop_D_C
-            port map(
-                D => Entrada(i),
-                Clk => Clk,
-                Clear => Reset,
-                Q => Q(i)
-            );
+    gen_clear: for i in 0 to 31 generate
+        process (clear)
+        begin
+            if clear = '1' then
+                reg_value(i) <= '0';
+            end if;
+        end process;
     end generate;
 
-    FF_D_Preset: for i in 0 to 31 generate
-        FF: entity work.FlipFlop_D_P
-            port map(
-                D => Entrada(i),
-                Clk => Clk,
-                Preset => Reset,
-                Q => Q(i)
-            );
+    gen_preset: for i in 0 to 31 generate
+        process (preset)
+        begin
+            if preset = '1' then
+                reg_value(i) <= '1';
+            end if;
+        end process;
     end generate;
-
-    process(Clk)
+                
+    process (clk, reset)
     begin
-        if rising_edge(Clk) then
-            if Enable = '1' then
-                Saida <= Q;
+        if reset = '1' then
+            reg_value <= X"00003000";
+        elsif rising_edge(clk) then
+            if enable = '1' then
+                reg_value <= d_in;
             end if;
         end if;
     end process;
+
+    q_out <= reg_value;
 end Behavioral;
