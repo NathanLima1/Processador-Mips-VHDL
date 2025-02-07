@@ -49,39 +49,38 @@ begin
         mem_write <= '0';
         alu_src <= '0';
         reg_write <= '0';
+        jump <= '0';
 
-        case opcode is
-            when "000000" => -- R
-                alu_op <= "10";
-                reg_dst <= '1';
-                reg_write <= '1';
-                
-            when "001000" => -- I
-                reg_write <= '1';
-                alu_src <= '1';
+        if opcode = "000000" then -- R
+            alu_op <= "10";
+            reg_dst <= '1';
+            reg_write <= '1';
 
-            when "100011" => -- LW
-                reg_write <= '1';
-                alu_src <= '1';
-                mem_to_reg <= '1';
-                mem_read <= '1';
+        elsif opcode = "001000" then -- I
+            reg_write <= '1';
+            alu_src <= '1';
 
-            when "101011" => -- SW
-                alu_src <= '1';
-                mem_write <= '1';
+        elsif opcode = "100011" then -- LW
+            reg_write <= '1';
+            alu_src <= '1';
+            mem_to_reg <= '1';
+            mem_read <= '1';
 
-            when "000100" => --BEQ
-                alu_op <= "01";
-                branch <= '1';
+        elsif opcode = "101011" then-- SW
+            alu_src <= '1';
+            mem_write <= '1';
 
-            when "000010" => --j
-                jump <= '1';
-            
-            when others =>
-                alu_op <= "00";
-                reg_dst <= '0';
-                reg_write <= '0';
-        end case;
+        elsif opcode = "000100" then --BEQ
+            alu_op <= "01";
+            branch <= '1';
+
+        elsif opcode = "000010" then --j
+            jump <= '1';
+
+        else
+            alu_op <= "00";
+            reg_dst <= '0';
+            reg_write <= '0';
+        end if;
     end process;
 end Behavioral;
-
