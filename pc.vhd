@@ -12,7 +12,7 @@ entity PC is
     );
 end PC;
 
-architecture Behavioral of PC_Register is
+architecture Behavioral of PC is
     signal reg_value : STD_LOGIC_VECTOR(31 downto 0) := X"00003000"; 
     component flipflop_d_c is
         port(
