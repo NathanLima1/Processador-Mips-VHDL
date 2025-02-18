@@ -19,7 +19,7 @@ end Ula_32;
 architecture Behavioral of Ula_32 is
 	signal VaiUm : std_logic_vector(31 downto 0);
    	signal OrResult : std_logic;
-	signal VaiSet : std_logic;
+	signal VaiSet : std_logic := '0';
 	signal ResultadoLocal : std_logic_vector (31 downto 0);
 begin
 	-- Instanciação da primeira ULA de 1 bit. 
@@ -34,7 +34,7 @@ begin
             	Resultado => ResultadoLocal(0),
             	VaiUm => VaiUm(0),
 	    	Less => VaiSet
-            );
+			);
 
 	-- Generate das ULAs dos bits de 1 - 30
 	gen_ula : for i in 1 to 30 generate
