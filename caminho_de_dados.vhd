@@ -4,7 +4,16 @@ use IEEE.NUMERIC_STD.ALL;
 
 entity caminho_de_dados is
 	port(
-		CLK: in std_logic
+		-- Sinal de Clock
+		CLK: in std_logic;
+		
+		-- Entradas
+		debugEndereco: in std_logic_vector(31 downto 0);
+		
+		-- Saídas
+		debugPalavra: out std_logic_vector(31 downto 0);
+		pc_outt: out std_logic_vector(31 downto 0);
+		debug_ula: out std_logic_vector(31 downto 0)
 	);
 end caminho_de_dados;
 
@@ -101,9 +110,9 @@ begin
     Instance_MemoriaInstrucoes: entity work.memInstrucoes
     	Port Map(
         	-- Entradas
-            Endereco => pc_out,
+         Endereco => pc_out,
             
-            -- Saídas
+         -- Saídas
         	Palavra => instrucao
         );
     
@@ -111,10 +120,10 @@ begin
     Instance_Deslocador2bits_esq_jump: entity work.deslocador_2b_esq
     	Port Map(
         	-- Entradas
-            entrada => instrucao,
+         entrada => instrucao,
             
-            -- Saídas
-            saida => jump_adr_from_deslocador_2b_esq
+         -- Saídas
+         saida => jump_adr_from_deslocador_2b_esq
         );
     
     -- O endereço de jump deslocado recebe os 4 bits mais à esquerda 
@@ -124,31 +133,31 @@ begin
     Instance_Unidade_de_Controle: entity work.control
     	Port Map(
         	-- Entradas:
-            opcode => instrucao(31 downto 26),
-           	
-            -- Saídas
-            alu_op => alu_op_cable,
-            reg_write => reg_write_cable,
-            reg_dst => reg_dst_cable,
-            alu_src => alu_src_cable,
-            branch => branch_cable,
-            mem_write => mem_write_cable,
-            mem_to_reg => mem_to_reg_cable,
+         opcode => instrucao(31 downto 26),
+          	
+         -- Saídas
+         alu_op => alu_op_cable,
+         reg_write => reg_write_cable,
+         reg_dst => reg_dst_cable,
+         alu_src => alu_src_cable,
+         branch => branch_cable,
+         mem_write => mem_write_cable,
+         mem_to_reg => mem_to_reg_cable,
         	jump => jump_sel,
-            mem_read => mem_read_cable
-        );
+         mem_read => mem_read_cable
+      );
         
 	
     Instance_Mux2x5_Sel_Reg: entity work.mux_2_X_5
     	Port Map(
         	-- Entradas
         	A => instrucao(20 downto 16),
-            B => instrucao(15 downto 11),
-            Sel => reg_dst_cable,
+         B => instrucao(15 downto 11),
+         Sel => reg_dst_cable,
         	
         	-- Saídas
-            Saida => reg_to_write
-        );
+         Saida => reg_to_write
+      );
         
     -- Banco de registradores
     Instance_Banco_Reg: entity work.banco_reg
@@ -158,10 +167,11 @@ begin
             reg2_addr => instrucao(20 downto 16),
             write_data => data_write_cable,
             reg_write => reg_write_cable,
+				addr_write => reg_to_write,
             clock => CLK,
             
             -- Saídas
-        	read_reg1 => first_reg_content,
+				read_reg1 => first_reg_content,
             read_reg2 => second_reg_content
         );
     
@@ -271,11 +281,11 @@ begin
             EscreverMem => mem_write_cable,
             CLOCK => CLK,
             LerMem => mem_read_cable,
-            DebugEndereco => ula_result_cable,
+            DebugEndereco => DebugEndereco,
             
             -- Saídas
-        	DadoLido => dado_lido_cable
-            --DebugPalavra => dado_lido_cable
+				DadoLido => dado_lido_cable,
+            DebugPalavra => DebugPalavra
         );
     
     -- Último Mux do caminho de dados
@@ -289,5 +299,8 @@ begin
             -- Saídas
             Saida => data_write_cable
         );
+	
+	pc_outt <= pc_out;
+	debug_ula <= ula_result_cable;
     
 end Behavioral;
