@@ -40,17 +40,17 @@ begin
     
     gen_camada2: for i in 0 to 7 generate
     	begin 
-        	Camada2(i) <= E(2*i) or E(2*i + 1);
+        	Camada2(i) <= Camada1(2*i) or Camada1(2*i + 1);
 	end generate;
     
     gen_camada3: for i in 0 to 3 generate
     	begin 
-        	Camada3(i) <= E(2*i) or E(2*i + 1);
+        	Camada3(i) <= Camada2(2*i) or Camada2(2*i + 1);
 	end generate;
     
    gen_camada4: for i in 0 to 1 generate
     	begin 
-        	Camada4(i) <= E(2*i) or E(2*i + 1);
+        	Camada4(i) <= Camada3(2*i) or Camada3(2*i + 1);
 	end generate;
     
     -- Nao precisa de generate para a ultima camada, basta

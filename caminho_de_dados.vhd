@@ -9,11 +9,20 @@ entity caminho_de_dados is
 		
 		-- Entradas
 		debugEndereco: in std_logic_vector(31 downto 0);
+		pc_reset: in std_logic;
 		
 		-- Saídas
 		debugPalavra: out std_logic_vector(31 downto 0);
 		pc_outt: out std_logic_vector(31 downto 0);
-		debug_ula: out std_logic_vector(31 downto 0)
+		debug_ula: out std_logic_vector(31 downto 0);
+		debug_ula_op1: out std_logic_vector(31 downto 0);
+		debug_ula_op2: out std_logic_vector(31 downto 0);
+		debug_rs: out std_logic_vector(31 downto 0);
+		debug_rt: out std_logic_vector(31 downto 0);
+		debug_wb: out std_logic_vector(31 downto 0);
+		debug_wb_addr: out std_logic_vector(4 downto 0);
+		debug_muxf: out std_logic;
+		debug_muxs: out std_logic
 	);
 end caminho_de_dados;
 
@@ -29,7 +38,7 @@ architecture Behavioral of caminho_de_dados is
     signal instrucao: std_logic_vector(31 downto 0);
     
     -- Fio para guardar o endereço de jump
-    signal jump_adr_from_deslocador_2b_esq : std_logic_vector(31 downto 0);
+    signal jump_adr_from_deslocador_2b_esq : std_logic_vector(27 downto 0);
     
     -- Fios para as saídas da unidade de controle
     signal jump_sel: std_logic;
@@ -78,22 +87,19 @@ architecture Behavioral of caminho_de_dados is
     -- Fio escreve dado
     signal data_write_cable: std_logic_vector(31 downto 0);
 	 
-	 -- Fio inicial do pc reset
-	 signal pc_reset_init: std_logic := '1';
-
+    signal jump_cat: std_logic_vector(31 downto 0);
 begin
     Instance_PC: entity work.PC 
     	Port Map(
 	-- Entradas
             CLK => clk, 
-	    reset => pc_reset_init,
+	    reset => pc_reset,
             
             d_in => pc_in,
             
             -- Saídas
             q_out => pc_out
 		);
-	 pc_reset_init <= '0';
 	 
     -- Incrementador do PC
     Instance_Somador32bits_PC: entity work.Somador32bits
@@ -117,18 +123,19 @@ begin
         );
     
      
-    Instance_Deslocador2bits_esq_jump: entity work.deslocador_2b_esq
+    Instance_Deslocador2bits_esq_jump: entity work.deslocador_2b_esq_26x28
     	Port Map(
         	-- Entradas
-         entrada => instrucao,
+         entrada => instrucao(25 downto 0),
             
          -- Saídas
          saida => jump_adr_from_deslocador_2b_esq
         );
     
-    -- O endereço de jump deslocado recebe os 4 bits mais à esquerda 
+    -- O endereço de jump deslocado recebe os 4 bits
     -- do endereço do PC+4
-    --jump_adr_from_deslocador_2b_esq(31 downto 28) <= pc_mais_quatro(31 downto 28);
+    jump_cat <= pc_mais_quatro(31 downto 28) & jump_adr_from_deslocador_2b_esq ;
+
     
     Instance_Unidade_de_Controle: entity work.control
     	Port Map(
@@ -174,6 +181,10 @@ begin
 				read_reg1 => first_reg_content,
             read_reg2 => second_reg_content
         );
+		debug_rs <= first_reg_content;
+		debug_rt <= second_reg_content;
+		debug_wb <= data_write_cable;
+		debug_wb_addr <= reg_to_write;
     
     -- Extensão de sinal do imediato de desvio
     Instance_Extensao_Sinal_EndDesvio: entity work.extensor_sinal
@@ -239,12 +250,14 @@ begin
     	Port Map(
         	-- Entradas
             A => first_mux_pc,
-            B => pc_mais_quatro(31 downto 0),
+            B => jump_cat,
             Sel => jump_sel,
             
             -- Saídas
             Saida => pc_in
         );
+	debug_muxf <= branch_if_eqz_cable;
+	debug_muxs <= jump_sel;
         
     Instance_Mux2x32_ULA_2nd_op: entity work.mux_2_x_32
     	Port Map(
@@ -271,6 +284,8 @@ begin
         	Resultado => ula_result_cable,
             Zero => result_zero_cable
         );
+		debug_ula_op1 <= first_reg_content;
+		debug_ula_op2 <= ula_second_op;
    	
     -- Memória de dados
     Instance_memDados: entity work.memDados
