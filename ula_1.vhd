@@ -23,11 +23,15 @@ architecture Behavioral of ula_1 is
   signal AndResult : std_logic;
   signal OrResult: std_logic;
   signal SomaResult: std_logic;
+  signal A_barr: std_logic;
+  signal B_barr: std_logic;
 begin
+	a_barr <= not A;
+	b_barr <= not B;
   mux_2_instancia_A: entity work.mux_2
 		port map(
 			E0 => A,
-			E1 => not A,
+			E1 => a_barr,
 			Sel => Ainvert,
 			Saida => Ainvertido
 		);
@@ -35,7 +39,7 @@ begin
 	mux_2_instancia_B: entity work.mux_2
 		port map(
 			E0 => B,
-			E1 => not B,
+			E1 => b_barr,
 			Sel => Binvert,
 			Saida => Binvertido
 		);
