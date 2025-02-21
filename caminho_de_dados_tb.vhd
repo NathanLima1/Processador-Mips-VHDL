@@ -1,12 +1,11 @@
 LIBRARY ieee;
 USE ieee.std_logic_1164.ALL;
- 
 USE ieee.numeric_std.ALL;
  
 ENTITY caminho_de_dados_tb IS
 END caminho_de_dados_tb;
  
-ARCHITECTURE behavior OF caminho_de_dados_tb IS  
+ARCHITECTURE behavior OF caminho_de_dados_tb IS 
     COMPONENT caminho_de_dados
     PORT(
          CLK : IN  std_logic;
@@ -23,70 +22,67 @@ ARCHITECTURE behavior OF caminho_de_dados_tb IS
 			debug_wb_addr: out std_logic_vector(4 downto 0);
 			debug_muxf: out std_logic;
 			debug_muxs: out std_logic
-
         );
-   END COMPONENT;
-    
-   signal debug_muxf: std_logic;
-   signal debug_muxs: std_logic;
+    END COMPONENT;
+	 
+    signal debug_muxf: std_logic;
+    signal debug_muxs: std_logic;
 
-   --Inputs
-   signal CLK : std_logic := '0';
-   signal pc_reset: std_logic;
-   signal debugEndereco : std_logic_vector(31 downto 0) := (others => '0');
+    --Inputs
+    signal CLK : std_logic := '0';
+    signal pc_reset: std_logic;
+    signal debugEndereco : std_logic_vector(31 downto 0) := (others => '0');
 
- 	--Outputs
-   signal debugPalavra : std_logic_vector(31 downto 0);
-   signal pc_outt : std_logic_vector(31 downto 0);
-   signal debug_ula : std_logic_vector(31 downto 0);
+    --Outputs
+    signal debugPalavra : std_logic_vector(31 downto 0);
+    signal pc_outt : std_logic_vector(31 downto 0);
+    signal debug_ula : std_logic_vector(31 downto 0);
 	
-   signal ula_1: std_logic_vector(31 downto 0);
-   signal ula_2: std_logic_vector(31 downto 0);
-	
-   signal rs:  std_logic_vector(31 downto 0);
-   signal rt:  std_logic_vector(31 downto 0);
-	
-   signal wb: std_logic_vector(31 downto 0);
+    signal ula_1: std_logic_vector(31 downto 0);
+    signal ula_2: std_logic_vector(31 downto 0);
 
-   signal wb_addr: std_logic_vector(4 downto 0);	
+    signal rs:  std_logic_vector(31 downto 0);
+    signal rt:  std_logic_vector(31 downto 0);
 	
-   -- Clock period definitions
-   constant CLK_period : time := 10 ns;
+    signal wb: std_logic_vector(31 downto 0);
+    signal wb_addr: std_logic_vector(4 downto 0);	
+	
+    -- Clock period definitions
+    constant CLK_period : time := 10 ns;
  
 BEGIN
  
-	-- Instantiate the Unit Under Test (UUT)
-   uut: caminho_de_dados PORT MAP (
+    -- Instantiate the Unit Under Test (UUT)
+    uut: caminho_de_dados PORT MAP (
           CLK => CLK,
-			 pc_reset => pc_reset,
+	  pc_reset => pc_reset,
           debugEndereco => debugEndereco,
           debugPalavra => debugPalavra,
           pc_outt => pc_outt,
           debug_ula => debug_ula,
-		         debug_ula_op1 => ula_1,
-			 debug_ula_op2 => ula_2,
-			 debug_rs => rs,
-			 debug_rt => rt,
-			 debug_wb => wb,
-			 debug_wb_addr => wb_addr,
-			 debug_muxf => debug_muxf,
-			 debug_muxs => debug_muxs
-        );
+	  debug_ula_op1 => ula_1,
+	  debug_ula_op2 => ula_2,
+	  debug_rs => rs,
+	  debug_rt => rt,
+	  debug_wb => wb,
+	  debug_wb_addr => wb_addr,
+	  debug_muxf => debug_muxf,
+	  debug_muxs => debug_muxs
+    );
 
-   -- Clock process definitions
-   CLK_process :process
-   begin
+    -- Clock process definitions
+    CLK_process :process
+    begin
 		CLK <= '0';
 		wait for CLK_period/2;
 		CLK <= '1';
 		wait for CLK_period/2;
-   end process;
+    end process;
  
 
-   -- Stimulus process
-   stim_proc: process
-   begin		
-      -- hold reset state for 100 ns.
+    -- Stimulus process
+    stim_proc: process
+    begin		
 		pc_reset <= '1';
 		wait for CLK_period*2;
 		pc_reset <= '0';
@@ -95,7 +91,7 @@ BEGIN
       		debugEndereco <= std_logic_vector(to_signed(0, 32));
 		wait for CLk_period*2;
 		
-     		debugEndereco <= std_logic_vector(to_signed(4, 32));
+      		debugEndereco <= std_logic_vector(to_signed(4, 32));
 		wait for CLk_period*2;
 		
       		debugEndereco <= std_logic_vector(to_signed(8, 32));
@@ -115,10 +111,6 @@ BEGIN
 		
       		debugEndereco <= std_logic_vector(to_signed(28, 32));
 		wait for CLk_period*2;
-
-      -- insert stimulus here 
-
       wait;
    end process;
-
 END;
