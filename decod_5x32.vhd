@@ -1,29 +1,6 @@
-----------------------------------------------------------------------------------
--- Company: UFSJ
--- Engineer: Nathan Lima
--- 
--- Create Date:    15:17:50 01/22/2025 
--- Design Name: 
--- Module Name:    decod_5x32 - Behavioral 
--- Project Name: 
--- Target Devices: 
--- Tool versions: 
--- Description: Decodificador que tem 5 entradas de endereço que determina a saida
---
--- Dependencies: 
---
--- Revision: 
--- Revision 0.01 - File Created
--- Additional Comments: 
---
-----------------------------------------------------------------------------------
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
-
 use IEEE.NUMERIC_STD.ALL;
-
---library UNISIM;
---use UNISIM.VComponents.all;
 
 entity Decod_5x32 is
     port(
